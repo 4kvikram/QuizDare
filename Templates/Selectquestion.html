@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="min-height: 500px;">
+    <div class="container" id="">
+        <br>
+        <div class="jumbotron" id="divcontainer">
+            <div class="form-group col-md-12" id="divname">
+                <label> Enter Your Name</label>
+                <div>
+                    <input type="text" id="txtname" maxlength="20" class="textinput textInput form-control" required=""
+                        id="idtxtotp">
+                </div>
+                <br>
+                <button type="submit" class="btn-primary col-md-12" onclick="nextWork();">Next</button>
+            </div>
+            <div id="divquestion">
+                <h3 align="center" id="questionNumberHeading"></h3>
+                <h4 class="text-primary"> <label id="lblquestion">your question ?</label></h4>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="1">
+                        <p id="option1">Option 1</p>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="2">
+                        <p id="option2">Option 2</p>
+                    </label>
+                </div>
+                <div class="form-check disabled">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="3">
+                        <p id="option3">Option 3</p>
+                    </label>
+                </div>
+                <div class="form-check disabled">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="4">
+                        <p id="option4">Option 4</p>
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary col-md-12" onclick="saveAnswer();">Next</button>
+            </div>
+        </div>
+        <div class="jumbotron" id="divShare" style="visibility: hidden;">
+Share To Whatsapp
+<!-- <a href="https://api.whatsapp.com/send?phone=15551234567">Send Message</a> -->
+<a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">Share via Whatsapp</a>
+        </div>
+    </div>
+    
+</div>
+<!-- script-->
+
+<script type="text/javascript">
+    function getBaseUrl() {
+        var pathArray = location.href.split('/');
+        var protocol = pathArray[0];
+        var host = pathArray[2];
+        var url = protocol + '//' + host + '/';
+        return url;
+    }
+    var QuestionData = null;
+    var count = 0;
+    $(document).ready(function () {
+        console.log("ready question page!");
+        bindquestion();
+        $("#divquestion").css("visibility", "hidden")
+    });
+    var name = ""
+    function nextWork() {
+        name = $("#txtname").val();
+        // alert(name);
+        // console.log(getBaseUrl());
+        $("#divname").empty();
+        $("#divquestion").css("visibility", "visible");
+        NextQuestion();
+    }
+    var questionid = "";
+    var ansOpt = "";
+    function saveAnswer() {
+        i = QuestionData.length;
+        var radioValue = $("input[name='optradio']:checked").val();
+        if (count < i && radioValue != undefined) {
+            $("input[name='optradio']").prop("checked", false)
+            console.log("count is ", count)
+            questionid = questionid + QuestionData[count].pk + ",";
+            ansOpt = ansOpt + radioValue + ",";
+            console.log(questionid)
+            console.log(ansOpt)
+            count++;
+            if(count==i)
+            {
+                SendQuestionAndOption();
+            }
+        }
+        else{
+        }
+        NextQuestion();
+    }
+    function NextQuestion() {
+
+        i = QuestionData.length;
+        if (count < i) {
+            $("#questionNumberHeading").html("1 Of " + i);
+            $("#lblquestion").html(QuestionData[count].fields.qustion)
+            $("#option1").html(QuestionData[count].fields.option1)
+            $("#option2").html(QuestionData[count].fields.option2)
+            $("#option3").html(QuestionData[count].fields.option3)
+            $("#option4").html(QuestionData[count].fields.option4)
+        }
+
+        //
+        //alert(radioValue)
+        // console.log("from next question :",QuestionData)
+    }
+
+    function SendQuestionAndOption() {
+        $.ajax({
+            url: 'AddUserAndQuestion',
+            type: 'POST',
+            headers: { "X-CSRFTOKEN": "{{ csrf_token }}" },
+            data: {
+                'name': name,
+                'Option': ansOpt,
+                'Question': questionid
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    console.log("success saved")
+                    console.log(data)
+                    console.log(getBaseUrl(),data.data)
+                    //$("#divcontainer").css("visibility", "hidden");
+                    //$("#divquestion").css("visibility", "hidden");
+                    $("#divcontainer").remove();
+                    $("#divShare").css("visibility", "visible");
+                }
+                else {
+                    console.log(data);
+                }
+            },
+            error: function (data) {
+                console.log("error function");
+            }
+        });
+    }
+
+    function bindquestion() {
+        $.ajax({
+            url: getBaseUrl() + 'getAllQuestionAndOptions',
+            type: 'GET',
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    console.log("success")
+                    company = JSON.parse(data.data)
+                    QuestionData = company;
+                }
+                else {
+                    console.log(data);
+                }
+            },
+            error: function (data) {
+                console.log("error function");
+            }
+        });
+    }
+</script>
+{% endblock %}

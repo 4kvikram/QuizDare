@@ -1,0 +1,448 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="min-height: 500px;">
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="form-group col-md-12" id="divname">
+                <label> Enter Your Name</label>
+                <div>
+                    <input type="text" id="txtname" maxlength="20" class="textinput textInput form-control" required=""
+                        id="idtxtotp">
+                </div>
+                <br>
+                <button type="submit" class="btn-primary col-md-12" onclick="nextWork();">Next</button>
+            </div>
+            <div id="divquestion">
+                <h5 align="center" class="text-primary">Question</h5>
+                <h3 align="center" id="questionNumberHeading"></h3>
+                <h4 class="text-primary"> <label id="lblquestion">your question ?</label></h4>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="1">
+                        <p id="option1">Option 1</p>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="2">
+                        <p id="option2">Option 2</p>
+                    </label>
+                </div>
+                <div class="form-check disabled">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="3">
+                        <p id="option3">Option 3</p>
+                    </label>
+                </div>
+                <div class="form-check disabled">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" value="4">
+                        <p id="option4">Option 4</p>
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary col-md-12" onclick="waitingfun();">Next</button>
+            </div>
+           
+            <div id="divAnsweredUser">
+                <h5 align="center" class="text-primary">Result</h5>
+                <table border="1" style="min-width: 100%;" id="tblresult">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>name</td>
+                        <td>20</td>
+                    </tr>
+                </table>
+            </div>
+          <div>
+              <br><br>
+            <button type="submit" class="btn-primary col-md-12"> <a href="/Selectquestion"
+                    class="btn-primary col-md-12">Create Your Quiz Now</a></button>
+                    
+          </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function getBaseUrl() {
+        var pathArray = location.href.split('/');
+        var protocol = pathArray[0];
+        var host = pathArray[2];
+        var url = protocol + '//' + host + '/';
+        return url;
+    }
+
+    function getUserId() {
+        var pathArray = location.href.split('/');
+        console.log(pathArray)
+        len = pathArray.length;
+        var id = pathArray[len - 2];
+        return id;
+    }
+
+
+
+
+
+
+
+
+    function getuserFriendsAnswer() {
+        console.log("user id is s s s  :", getUserId());
+
+        if (getUserId() > 0) {
+            $.ajax({
+                url: getBaseUrl() + 'getFriendsAnswerbyId',
+                type: 'GET',
+                data: { "id": getUserId() },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success get user answer")
+                        //console.log(data);
+                        dd = JSON.parse(data.data)
+
+                        console.log(dd);
+                        $("#tblresult").empty();
+                        $("#tblresult").append('<tr><th>S.No</th><th>Name</th><th>Score</th></tr>');
+
+                        for (var i = 0; i < dd.length; i++) {
+                            $("#tblresult").append('<tr> <td>' + (i + 1) + '</td><td>' + dd[i].fields.name + '</td><td>' + dd[i].fields.score + '</td></tr>');
+                        }
+                    }
+                    else {
+                        console.log(data);
+                    }
+                },
+                error: function (data) {
+                    console.log("error function");
+                }
+            });
+        }
+
+    }
+
+
+    $(document).ready(function () {
+        $("#divAnsweredUser").css("visibility", "hidden");
+        $("#divname").css("visibility", "hidden");
+        console.log("ready answer page!");
+        if (getUserId() > 0) {
+            //  console.log("greatere than aer ")
+            getallQuestionOfUser();
+            bindquestion();
+            getuserFriendsAnswer();
+
+            checkCookie();
+
+        }
+        else {
+            $("#divname").empty();
+            $("#divAnsweredUser").empty();
+            $("#divquestion").empty();
+            
+        }
+
+
+        $("#divquestion").css("visibility", "hidden");
+    });
+
+    function checkCookie() {
+        //var x = document.cookie;
+        var y = getCookie("User")
+        if (y == "") {
+           
+            console.log("cookies is empty")
+            id = getUserId();
+            document.cookie = "User" + "=" + id + ";"
+        }
+        else {
+             //$("#divAnsweredUser").css("visibility", "visible");
+           // $("#divname").css("visibility", "visible");
+           $("#divname").remove();
+           $("#divquestion").remove();
+           //$("#divAnsweredUser").append('<h5 class="text-primary">You have already answred</h5>');
+           
+            $("#divAnsweredUser").css("visibility", "visible");
+            console.log("cookies value is ", y)
+        }
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var name = "";
+    function nextWork() {
+        name = $("#txtname").val();
+        if (name != "") {
+            $("#divname").empty();
+            $("#divAnsweredUser").css("visibility", "hidden");
+            $("#divquestion").css("visibility", "visible");
+            NextQuestion();
+        }
+        else {
+            alert("Enter Name !")
+        }
+        // alert(name);
+        // console.log(getBaseUrl());
+
+    }
+    var QuestionData = null;
+    var count = 0;
+    function bindquestion() {
+        $.ajax({
+            url: getBaseUrl() + 'getAllQuestionAndOptions',
+            type: 'GET',
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    //console.log("success")
+                    company = JSON.parse(data.data)
+                    QuestionData = company;
+                }
+                else {
+                    console.log(data);
+                }
+            },
+            error: function (data) {
+                console.log("error function");
+            }
+        });
+    }
+    var answerData = null;
+    function getallQuestionOfUser() {
+        $.ajax({
+            url: getBaseUrl() + 'getUserQuestions',
+            type: 'GET',
+            data: { "id": getUserId() },
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    // console.log("success")
+                    // console.log(data);
+                    company = JSON.parse(data.data)
+                    answerData = company;
+                    // console.log(company);
+                }
+                else {
+                    console.log(data);
+                }
+            },
+            error: function (data) {
+                console.log("error function");
+            }
+        });
+    }
+
+    function NextQuestion() {
+        //console.log(QuestionData)
+        i = QuestionData.length;
+        if (count < i) {
+            $("#questionNumberHeading").html(count + 1 + " Of " + i);
+            $("#lblquestion").html(QuestionData[count].fields.qustion)
+            $("#option1").html(QuestionData[count].fields.option1)
+
+            $("#option2").html(QuestionData[count].fields.option2)
+            $("#option3").html(QuestionData[count].fields.option3)
+            $("#option4").html(QuestionData[count].fields.option4)
+        }
+    }
+
+    function waitingfun() {
+        // setTimeout(() => { console.log("World!"); }, 2000);
+
+        i = QuestionData.length;
+        var radioValue = $("input[name='optradio']:checked").val();
+
+        colorAnswer(QuestionData[count].pk, radioValue);
+
+
+        setTimeout(function () { saveAnswer(); }, 1000);
+    }
+
+
+    var questionid = "";
+    var ansOpt = "";
+    function saveAnswer() {
+        $("#option1").removeAttr("class");
+        $("#option2").removeAttr("class");
+        $("#option3").removeAttr("class");
+        $("#option4").removeAttr("class");
+        i = QuestionData.length;
+        var radioValue = $("input[name='optradio']:checked").val();
+        console.log("count  =", count);
+        if (count < i && radioValue != undefined) {
+            $("input[name='optradio']").prop("checked", false);
+
+            console.log("count is ", count)
+            questionid = questionid + QuestionData[count].pk + ",";
+            ansOpt = ansOpt + radioValue + ",";
+
+            //===========================================
+            //colorAnswer(QuestionData[count].pk, radioValue);
+
+            //==========================
+            //console.log(questionid)
+            //console.log(ansOpt)
+            count++;
+            if (count == i) {
+                checkAnswer();
+            }
+        }
+        else {
+        }
+
+        NextQuestion();
+    }
+
+
+    function colorAnswer(qid, OptNo) {
+        anslen = answerData.length;
+        // console.log(len)
+        // console.log(answerData.length)
+        for (var j = 0; j < answerData.length; j++) {
+            if (answerData[j].fields.QuID == qid) {
+                if (answerData[j].fields.userAns == 1) {
+                    $("#option1").addClass("text-success");
+                }
+
+                if (answerData[j].fields.userAns == 2) {
+                    $("#option2").addClass("text-success");
+                }
+
+                if (answerData[j].fields.userAns == 3) {
+                    $("#option3").addClass("text-success");
+                }
+
+                if (answerData[j].fields.userAns == 4) {
+                    $("#option4").addClass("text-success");
+                }
+
+                if (answerData[j].fields.userAns == OptNo) {
+
+                    console.log("correct answer==================================================")
+                    break;
+                }
+                else {
+                    console.log("wrong answer=================================================")
+                    break;
+                }
+            }
+        }
+
+
+    }
+
+    var correct = 0;
+    var wrong = 0;
+    function checkAnswer() {
+        //  console.log("chekc ans");
+        //  console.log(answerData);
+        //  console.log(ansOpt)
+        // console.log(questionid)
+        answeroptions = ansOpt.split(',');
+        questionsID = questionid.split(',');
+
+        //console.log("====================================")
+        // console.log("answer options  :", answeroptions)
+        // console.log("questions id :", questionsID)
+
+        len = answeroptions.length;
+        anslen = answerData.length;
+        // console.log(len)
+        // console.log(answerData.length)
+
+        for (var i = 0; i < len - 1; i++) {
+            for (var j = 0; j < answerData.length; j++) {
+                //console.log(answerData[j].fields.QuID)
+                //console.log(answerData[j].fields.userAns)
+                if (answerData[j].fields.QuID == questionsID[i]) {
+                    if (answerData[j].fields.userAns == answeroptions[i]) {
+                        correct++;
+                        break;
+                    }
+                    else {
+                        wrong++;
+                        break;
+                    }
+                }
+            }
+
+            //console.log(answeroptions[i], "--", questionsID[i]);
+        }
+        console.log("Correct :", correct)
+        console.log("Wrong :", wrong)
+        SaveUserResult();
+    }
+    function SaveUserResult() {
+        $.ajax({
+            url: getBaseUrl() + 'saveResult',
+            type: 'POST',
+            headers: { "X-CSRFTOKEN": "{{ csrf_token }}" },
+            data: {
+                'userid': getUserId(),
+                'name': name,
+                'score': correct
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $("#divname").remove();
+                    $("#divquestion").remove();
+
+                    $("#divAnsweredUser").css("visibility", "visible");
+                    console.log("result saved")
+                    console.log(data)
+                    getuserFriendsAnswer();
+                }
+                else {
+                    console.log(data);
+                }
+            },
+            error: function (data) {
+                console.log("error function");
+            }
+        });
+    }
+
+
+</script>
+{% endblock %}
