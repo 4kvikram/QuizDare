@@ -52,10 +52,18 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Quiz.urls'
 
+PROJECT_DIR = os.path.dirname(__file__) # this is not Django setting.
+TEMPLATE_DIRS = (
+    os.path.join(PROJECT_DIR, "Templates/index"),
+    os.path.join(BASE_DIR, "Templates"),
+    #os.path.join(BASE_DIR, "templates/Index")
+    # here you can add another templates directory if you wish.
+)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['Templates'],
+        'DIRS': TEMPLATE_DIRS,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

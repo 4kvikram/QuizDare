@@ -8,7 +8,7 @@ from .models import Questions,UserAnswer,Register,FriendsAnswer
 
 
 def Index(request,id=0):
-    print("page")
+    #print("page")
     if id==0:
         return render(request,'index.html',{"name":"vikraasdfadm"})
     else:
@@ -48,7 +48,7 @@ def AddUserAndQuestion(request):
 
         finalOption=option.split(',')
         finalquestionids=questionids.split(',')
-        print("data get :",name,finalOption,finalquestionids)
+        #print("data get :",name,finalOption,finalquestionids)
         
         register=Register()
         register.name=name
@@ -88,9 +88,9 @@ def getUserQuestions(request):
     try:
         #countryList=Country.objects.all().objects.values_list('id', 'headline')
         id=request.GET["id"]
-        print("id is ",id)
+        #print("id is ",id)
         newData=serializers.serialize("json",UserAnswer.objects.filter(Register__pk__contains=id))
-        print(newData) 
+        #print(newData) 
         if newData!="":            
             data = {
                     'success':True,
@@ -114,7 +114,7 @@ def saveResult(request):
         userid=request.POST["userid"]
         name=request.POST["name"]
         score=request.POST["score"]
-        print("data received is ",userid,name,score)
+        #print("data received is ",userid,name,score)
         FA=FriendsAnswer()
         
         FA.name= name
@@ -145,7 +145,7 @@ def getFriendsAnswerbyId(request):
         #countryList=Country.objects.all().objects.values_list('id', 'headline')
         id=request.GET["id"] 
         dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__contains=id))
-        print(dd)
+        #print(dd)
         if dd!="":            
             data = {
                     'success':True,
