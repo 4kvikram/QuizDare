@@ -4,7 +4,7 @@
 
     <div class="container">
         <div class="jumbotron">
-            <div class="form-group col-md-12" id="divname">
+            <div class="form-group col-md-12" id="divname" style="visibility: hidden;">
                 <label> Enter Your Name</label>
                 <div>
                     <input type="text" id="txtname" maxlength="20" class="textinput textInput form-control" required=""
@@ -13,7 +13,7 @@
                 <br>
                 <button type="submit" class="btn-primary col-md-12" onclick="nextWork();">Next</button>
             </div>
-            <div id="divquestion">
+            <div id="divquestion" style="visibility: hidden;">
                 <h5 align="center" class="text-primary">Question</h5>
                 <h3 align="center" id="questionNumberHeading"></h3>
                 <h4 class="text-primary"> <label id="lblquestion">your question ?</label></h4>
@@ -44,7 +44,7 @@
                 <button type="submit" class="btn-primary col-md-12" onclick="waitingfun();">Next</button>
             </div>
            
-            <div id="divAnsweredUser">
+            <div id="divAnsweredUser" style="visibility: hidden;">
                 <h5 align="center" class="text-primary">Result</h5>
                 <table border="1" style="min-width: 100%;" id="tblresult">
                     <tr>
@@ -158,10 +158,11 @@
         //var x = document.cookie;
         var y = getCookie("User")
         if (y == "") {
-           
+            $("#divAnsweredUser").css("visibility", "visible");
+            $("#divname").css("visibility", "visible");
             console.log("cookies is empty")
             id = getUserId();
-            document.cookie = "User" + "=" + id + ";"
+            
         }
         else {
              //$("#divAnsweredUser").css("visibility", "visible");
@@ -432,6 +433,7 @@
                     console.log("result saved")
                     console.log(data)
                     getuserFriendsAnswer();
+                    document.cookie = "User" + "=" + id + ";"
                 }
                 else {
                     console.log(data);

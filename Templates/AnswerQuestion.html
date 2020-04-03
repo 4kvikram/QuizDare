@@ -4,7 +4,7 @@
     <div class="container" id="">
         <br>
         <div class="jumbotron" id="divcontainer">
-            <div class="form-group col-md-12" id="divname">
+            <div class="form-group col-md-12" id="divname" >
                 <label> Enter Your Name</label>
                 <div>
                     <input type="text" id="txtname" maxlength="20" class="textinput textInput form-control" required=""
@@ -13,7 +13,7 @@
                 <br>
                 <button type="submit" class="btn-primary col-md-12" onclick="nextWork();">Next</button>
             </div>
-            <div id="divquestion">
+            <div id="divquestion" style="visibility: hidden;">
                 <h3 align="center" id="questionNumberHeading"></h3>
                 <h4 class="text-primary"> <label id="lblquestion">your question ?</label></h4>
                 <div class="form-check">
@@ -44,9 +44,10 @@
             </div>
         </div>
         <div class="jumbotron" id="divShare" style="visibility: hidden;">
-Share To Whatsapp
-<!-- <a href="https://api.whatsapp.com/send?phone=15551234567">Send Message</a> -->
-<a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">Share via Whatsapp</a>
+            <button type="submit" class="btn-success col-md-12" id="btnshare">
+
+            </button>
+
         </div>
     </div>
     
@@ -54,6 +55,13 @@ Share To Whatsapp
 <!-- script-->
 
 <script type="text/javascript">
+
+function shareQuiz()
+{
+    $("#btnshare").html('<a href="whatsapp://send?text=How well do you know!" data-action="share/whatsapp/share">Share via Whatsapp</a>');
+}
+
+
     function getBaseUrl() {
         var pathArray = location.href.split('/');
         var protocol = pathArray[0];
@@ -71,11 +79,18 @@ Share To Whatsapp
     var name = ""
     function nextWork() {
         name = $("#txtname").val();
-        // alert(name);
+        if(name=="")
+        {
+    // alert(name);
         // console.log(getBaseUrl());
         $("#divname").empty();
         $("#divquestion").css("visibility", "visible");
         NextQuestion();
+        }
+        else{
+            alert("Enter Name");
+        }
+    
     }
     var questionid = "";
     var ansOpt = "";
@@ -135,6 +150,7 @@ Share To Whatsapp
                     //$("#divquestion").css("visibility", "hidden");
                     $("#divcontainer").remove();
                     $("#divShare").css("visibility", "visible");
+                    shareQuiz();
                 }
                 else {
                     console.log(data);
