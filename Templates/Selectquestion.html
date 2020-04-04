@@ -127,7 +127,7 @@
 
         i = QuestionData.length;
         if (count < i) {
-            $("#questionNumberHeading").html("1 Of " + i);
+            $("#questionNumberHeading").html(count+1+" Of " + i);
             $("#lblquestion").html(QuestionData[count].fields.qustion)
             $("#option1").html(QuestionData[count].fields.option1)
             $("#option2").html(QuestionData[count].fields.option2)
