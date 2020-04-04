@@ -146,7 +146,7 @@ def getFriendsAnswerbyId(request):
         name=Register.objects.get(pk=id)
         #print("name is ",name.name)
         #dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__contains=id))
-        dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__exact=id))
+        dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__exact=id).order_by('score'))
         #print(dd)
         if dd!="":            
             data = {

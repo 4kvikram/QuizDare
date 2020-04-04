@@ -115,7 +115,7 @@
                         $("#tblresult").empty();
                         $("#tblresult").append('<tr><th>S.No</th><th>Name</th><th>Score</th></tr>');
 
-                        for (var i = 0; i < dd.length; i++) {
+                        for (var i = dd.length-1; i >0 ; i--) {
                             $("#tblresult").append('<tr> <td>' + (i + 1) + '</td><td>' + dd[i].fields.name + '</td><td>' + dd[i].fields.score + '</td></tr>');
                         }
                     }
