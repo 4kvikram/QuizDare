@@ -281,14 +281,18 @@
 
     function waitingfun() {
         // setTimeout(() => { console.log("World!"); }, 2000);
-
-        i = QuestionData.length;
         var radioValue = $("input[name='optradio']:checked").val();
-
-        colorAnswer(QuestionData[count].pk, radioValue);
-
-
-        setTimeout(function () { saveAnswer(); }, 1000);
+        if(radioValue>0)
+        {
+            i = QuestionData.length;
+            var radioValue = $("input[name='optradio']:checked").val();
+    
+            colorAnswer(QuestionData[count].pk, radioValue);
+    
+    
+            setTimeout(function () { saveAnswer(); }, 1000);
+        }
+        
     }
 
 
