@@ -189,14 +189,14 @@ def submitContactUs(request):
         cont.save()
         data = {
                 'success':True,
-                'message':"data saved",
-                'data':"" }
+                'message':"data saved"
+                }
         return JsonResponse(data)
     except Exception as ex:
         print('error in sigin is :',ex)
         data = {
             'success':False,
             'message':ex,
-            'data':"" }
+            }
         return JsonResponse(data)
 
