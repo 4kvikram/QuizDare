@@ -44,16 +44,34 @@
             </div>
         </div>
         <div class="jumbotron" id="divShare" style="visibility: hidden;">
-Share To Whatsapp
-<!-- <a href="https://api.whatsapp.com/send?phone=15551234567">Send Message</a> -->
-<a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">Share via Whatsapp</a>
+            <!-- <button type="submit" class="btn-success col-md-12" id="">
+
+            </button> -->
+            <div id="btnshare">
+
+            </div>
+            <div>
+                <br>
+                <br>
+                <p class="text-primary">Copy Link</p>
+                <p  id="txtsharelink" ></p>
+            </div>
         </div>
     </div>
-    
+
 </div>
 <!-- script-->
 
 <script type="text/javascript">
+
+    function shareQuiz(id,nam) {
+        url=getBaseUrl()+id;
+        $("#btnshare").html('<a href="whatsapp://send?text=How well do you know! '+nam+' Click here '+url+' " data-action="share/whatsapp/share">Share On Whatsapp</a>');
+
+        $("#txtsharelink").html("  "+url+  "");
+        //$("#txtsharelink").append(' '+url+'')
+
+    }
     function getBaseUrl() {
         var pathArray = location.href.split('/');
         var protocol = pathArray[0];
@@ -69,13 +87,20 @@ Share To Whatsapp
         $("#divquestion").css("visibility", "hidden")
     });
     var name = ""
+
     function nextWork() {
         name = $("#txtname").val();
-        // alert(name);
-        // console.log(getBaseUrl());
-        $("#divname").empty();
-        $("#divquestion").css("visibility", "visible");
-        NextQuestion();
+        if (name != "") {
+            // alert(name);
+            // console.log(getBaseUrl());
+            $("#divname").empty();
+            $("#divquestion").css("visibility", "visible");
+            NextQuestion();
+        }
+        else {
+            alert("Enter Name !!")
+        }
+
     }
     var questionid = "";
     var ansOpt = "";
@@ -90,12 +115,11 @@ Share To Whatsapp
             console.log(questionid)
             console.log(ansOpt)
             count++;
-            if(count==i)
-            {
+            if (count == i) {
                 SendQuestionAndOption();
             }
         }
-        else{
+        else {
         }
         NextQuestion();
     }
@@ -131,11 +155,13 @@ Share To Whatsapp
                 if (data.success) {
                     console.log("success saved")
                     console.log(data)
-                    console.log(getBaseUrl(),data.data)
+                    console.log(getBaseUrl(), data.data)
+                    id=data.data;
                     //$("#divcontainer").css("visibility", "hidden");
                     //$("#divquestion").css("visibility", "hidden");
                     $("#divcontainer").remove();
                     $("#divShare").css("visibility", "visible");
+                    shareQuiz(id,name);
                 }
                 else {
                     console.log(data);

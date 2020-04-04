@@ -142,14 +142,16 @@ def saveResult(request):
 
 def getFriendsAnswerbyId(request):
     try:
-        #countryList=Country.objects.all().objects.values_list('id', 'headline')
         id=request.GET["id"] 
+        name=Register.objects.get(pk=id)
+        #print("name is ",name.name)
         dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__contains=id))
         #print(dd)
         if dd!="":            
             data = {
                     'success':True,
                     'message':"Data found",
+                    'name':name.name,
                     'data':dd }
             return JsonResponse(data) 
         else:

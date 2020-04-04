@@ -3,6 +3,7 @@
 <div style="min-height: 500px;">
 
     <div class="container">
+        <h3 align="center" id="txtnameHeading"></h3>
         <div class="jumbotron">
             <div class="form-group col-md-12" id="divname" style="visibility: hidden;">
                 <label> Enter Your Name</label>
@@ -81,7 +82,7 @@
 
     function getUserId() {
         var pathArray = location.href.split('/');
-        console.log(pathArray)
+        //console.log(pathArray)
         len = pathArray.length;
         var id = pathArray[len - 2];
         return id;
@@ -95,7 +96,7 @@
 
 
     function getuserFriendsAnswer() {
-        console.log("user id is s s s  :", getUserId());
+        
 
         if (getUserId() > 0) {
             $.ajax({
@@ -105,11 +106,12 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.success) {
-                        console.log("success get user answer")
+                        //console.log("success get user answer")
                         //console.log(data);
                         dd = JSON.parse(data.data)
 
-                        console.log(dd);
+                        //console.log("friends answer adafadsfadsf   :",dd);
+                        $("#txtnameHeading").html("How Well You Know "+data.name);
                         $("#tblresult").empty();
                         $("#tblresult").append('<tr><th>S.No</th><th>Name</th><th>Score</th></tr>');
 
@@ -118,7 +120,7 @@
                         }
                     }
                     else {
-                        console.log(data);
+                        //console.log(data);
                     }
                 },
                 error: function (data) {
@@ -133,7 +135,7 @@
     $(document).ready(function () {
         $("#divAnsweredUser").css("visibility", "hidden");
         $("#divname").css("visibility", "hidden");
-        console.log("ready answer page!");
+        //console.log("ready answer page!");
         if (getUserId() > 0) {
             //  console.log("greatere than aer ")
             getallQuestionOfUser();
@@ -156,12 +158,13 @@
 
     function checkCookie() {
         //var x = document.cookie;
-        var y = getCookie("User")
+        var y = getCookie("User"+getUserId())
+
         if (y == "") {
             $("#divAnsweredUser").css("visibility", "visible");
             $("#divname").css("visibility", "visible");
-            console.log("cookies is empty")
-            id = getUserId();
+            //console.log("cookies is empty")
+
             
         }
         else {
@@ -172,7 +175,7 @@
            //$("#divAnsweredUser").append('<h5 class="text-primary">You have already answred</h5>');
            
             $("#divAnsweredUser").css("visibility", "visible");
-            console.log("cookies value is ", y)
+            //console.log("cookies value is ", y)
         }
     }
 
@@ -191,22 +194,6 @@
         }
         return "";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     var name = "";
@@ -240,7 +227,7 @@
                     QuestionData = company;
                 }
                 else {
-                    console.log(data);
+                    //console.log(data);
                 }
             },
             error: function (data) {
@@ -313,7 +300,7 @@
         if (count < i && radioValue != undefined) {
             $("input[name='optradio']").prop("checked", false);
 
-            console.log("count is ", count)
+            //console.log("count is ", count)
             questionid = questionid + QuestionData[count].pk + ",";
             ansOpt = ansOpt + radioValue + ",";
 
@@ -359,11 +346,11 @@
 
                 if (answerData[j].fields.userAns == OptNo) {
 
-                    console.log("correct answer==================================================")
+                    //console.log("correct answer==================================================")
                     break;
                 }
                 else {
-                    console.log("wrong answer=================================================")
+                    //console.log("wrong answer=================================================")
                     break;
                 }
             }
@@ -409,8 +396,8 @@
 
             //console.log(answeroptions[i], "--", questionsID[i]);
         }
-        console.log("Correct :", correct)
-        console.log("Wrong :", wrong)
+        //console.log("Correct :", correct)
+        //console.log("Wrong :", wrong)
         SaveUserResult();
     }
     function SaveUserResult() {
@@ -430,10 +417,12 @@
                     $("#divquestion").remove();
 
                     $("#divAnsweredUser").css("visibility", "visible");
-                    console.log("result saved")
-                    console.log(data)
+                    //console.log("result saved")
+                    //console.log(data)
                     getuserFriendsAnswer();
-                    document.cookie = "User" + "=" + id + ";"
+                    //======================
+                   //var v="User"+getUserId();
+                    document.cookie = "User"+getUserId() + "=" + getUserId() + ";"
                 }
                 else {
                     console.log(data);
