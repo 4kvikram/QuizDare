@@ -12,6 +12,10 @@ urlpatterns = [
     path('getUserQuestions', views.getUserQuestions, name="getUserQuestions"),
     path('saveResult', views.saveResult, name="saveResult"),
     path('getFriendsAnswerbyId', views.getFriendsAnswerbyId, name="getFriendsAnswerbyId"),
+    path('submitContactUs', views.submitContactUs, name="submitContactUs"),
+    path('contact', views.contact, name="contact"),
+    path('game', views.Game, name="game"),
 
 
+    
 ]

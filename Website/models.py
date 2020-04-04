@@ -34,3 +34,12 @@ class FriendsAnswer(models.Model):
     name=models.CharField(max_length=50)
     score=models.IntegerField()
     Register=models.ForeignKey(Register, on_delete=models.CASCADE)
+
+class contactus(models.Model):
+    name=models.CharField(max_length=30)
+    email=models.EmailField()
+    subject=models.CharField(max_length=200)
+    message=models.TextField()
+    createdDate=models.DateTimeField(auto_now=False,auto_now_add=True)
+    updatedDate=models.DateTimeField(auto_now=True,auto_now_add=False)
+    isActive=models.BooleanField(default=True)

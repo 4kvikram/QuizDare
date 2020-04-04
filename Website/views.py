@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpRequest,request,HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
-from .models import Questions,UserAnswer,Register,FriendsAnswer
+from .models import Questions,UserAnswer,Register,FriendsAnswer,contactus
 # Create your views here.
 
 
@@ -163,3 +163,39 @@ def getFriendsAnswerbyId(request):
     except Exception as ex:
         #print("error is :",ex)
         return {'message':ex}
+
+
+def Game(request):
+    return render(request,'game.html')
+
+
+def contact(request):
+    return render(request,'contact.html')
+
+
+def submitContactUs(request):
+    try:
+        print("request comeiiii")
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        cont=contactus()
+        cont.name=name
+        cont.email=email
+        cont.subject=subject
+        cont.message=message
+        cont.save()
+        data = {
+                'success':True,
+                'message':"data saved",
+                'data':"" }
+        return JsonResponse(data)
+    except Exception as ex:
+        print('error in sigin is :',ex)
+        data = {
+            'success':False,
+            'message':ex,
+            'data':"" }
+        return JsonResponse(data)
+

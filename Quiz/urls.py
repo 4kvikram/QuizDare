@@ -20,4 +20,6 @@ from django.urls import path,include
 urlpatterns = [
     path('securelogin/', admin.site.urls),
     path('',include('Website.urls'))
+
+    
 ]
