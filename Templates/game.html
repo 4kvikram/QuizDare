@@ -2,136 +2,43 @@
 {% block content %}
 
 
-<style type="text/css">
-  canvas {
-     border : 1px solid;
-     margin : 0 auto;
-     width : 800px;
-     display : block;
-     margin-top : 50px;
-     background-color : #E8F5E9;
-  }
-</style>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    console.log("about ready!");
+  });
+</script>
+
+<div>
+
+<div class="container" style="min-height: 500px;">
+<!--Section: Contact v.2-->
+<section class="mb-4">
+
+    <!--Section heading-->
+    <h2 class=" font-weight-bold text-center">About us</h2>
+    <!--Section description-->
+    <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to you within
+        a matter of hours to help you.</p>
+
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-md-9 mb-md-0 mb-5">
+           
+
+           
+        </div>
+        <!--Grid column-->
+
+    </div>
+
+</section>
+<!--Section: Contact v.2-->
+</div>
+
+</div>
 
 
-  <canvas id="gameCanvas" height="600px" width="800px"/>
-  
-  <script type="text/javascript">
-      var canvas = document.getElementById("gameCanvas");
-      var ctx = canvas.getContext("2d");
-      var ballR = 10, x = canvas.width / 2, y = canvas.height - 30,
-          dx = 3, dy = -3, pongH = 15, pongW = 80, pongX = (canvas.width - pongW) / 2,
-          rightKey = false, leftKey = false, brickRows = 3, brickCol = 9,
-          brickW = 75, brickH = 20, brickPadding = 10, brickOffsetTop = 30,
-          brickOffsetLeft = 30;
-          
-       var bricks = [];
-      
-       for (c = 0; c < brickCol; c++) {
-         for (r = 0; r < brickRows; r++) {
-            bricks.push({
-              x : (c * (brickW + brickPadding)) + brickOffsetLeft,
-              y : (r * (brickH + brickPadding)) + brickOffsetTop,
-              status : 1
-            });
-         }
-       }
-      
-       function drawBall() {
-         ctx.beginPath();
-         ctx.arc(x, y, ballR, 0, Math.PI * 2);
-         ctx.fillStyle = "#00C853";
-         ctx.fill();
-         ctx.closePath();
-       }
-      
-       function drawPong() {
-         ctx.beginPath();
-         ctx.rect(pongX, canvas.height - pongH, pongW, pongH);
-         ctx.fillStyle = "#1B5E20";
-         ctx.fill();
-         ctx.closePath();
-       }
-      
-       function drawBricks() {
-         bricks.forEach(function(brick) {
-           if (!brick.status) return;
-           
-           ctx.beginPath();
-           ctx.rect(brick.x, brick.y, brickW, brickH);
-           ctx.fillStyle = "#1B5E20";
-           ctx.fill();
-           ctx.closePath();
-         });
-       }
-      
-       function collisionDetection() {
-         bricks.forEach(function(b) {
-           if (!b.status) return;
-           
-           var inBricksColumn = x > b.x  &&  x < b.x + brickW,
-               inBricksRow = y > b.y  &&  y < b.y + brickH;
-               
-               if (inBricksColumn && inBricksRow) {
-                 dy = -dy;
-                 b.status = 0;
-               }
-         });
-       }
-      
-       function draw() {
-         ctx.clearRect(0, 0, canvas.width, canvas.height);
-         drawBricks();
-         drawBall();
-         drawPong();
-         collisionDetection();
-         
-         if (hitSideWall())
-           dx = -dx;
-           
-         if (hitTop()  ||  hitPong())
-           dy = -dy;
-        
-         if (gameOver())
-           document.location.reload();
-           
-         var RIGHT_ARROW = 39, LEFT_ARROW = 37;
-         
-         function hitPong() { return hitBottom() && ballOverPong(); }
-         function ballOverPong() { return x > pongX  &&  x < pongX + pongW; }
-         function hitBottom() { return y + dy > canvas.height - ballR; }
-         function gameOver() { return hitBottom() && !ballOverPong(); }
-         function hitSideWall() { return x + dx > canvas.width - ballR || x + dx < ballR; }
-         function hitTop() { return y + dy < ballR; }
-         function xOutOfBounds() { return x + dx > canvas.width - ballR ||  x + dx < ballR; }
-         function rightPressed(e) { return e.keyCode == RIGHT_ARROW; }
-         function leftPressed(e) { return e.keyCode == LEFT_ARROW; }
-         function keyDown(e) {
-           rightKey = rightPressed(e);
-           leftKey = leftPressed(e);
-         }
-         
-         function keyUp(e) {
-           rightKey = rightPressed(e) ? false : rightKey;
-           leftKey = leftPressed(e) ? false : leftKey;
-         }
-         
-         document.addEventListener("keydown", keyDown, false);
-         document.addEventListener("keyup", keyUp, false);
-         
-         var maxX = canvas.width - pongW, minX = 0, pongDelta = rightKey ? 7 : leftKey ? -7 : 0;
-         
-         pongX = pongX + pongDelta;
-         pongX = Math.min(pongX, maxX);
-         pongX = Math.max(pongX, minX);
-         
-         x += dx;
-         y += dy;
-       }
-      
-       setInterval(draw, 10);
-        
-  </script>
-  
 
 {% endblock content %}

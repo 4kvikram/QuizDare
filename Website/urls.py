@@ -14,7 +14,7 @@ urlpatterns = [
     path('getFriendsAnswerbyId', views.getFriendsAnswerbyId, name="getFriendsAnswerbyId"),
     path('submitContactUs', views.submitContactUs, name="submitContactUs"),
     path('contact', views.contact, name="contact"),
-    path('game', views.Game, name="game"),
+    path('about', views.Game, name="about"),
 
 
     
