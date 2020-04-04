@@ -66,7 +66,7 @@
 
     function shareQuiz(id,nam) {
         url=getBaseUrl()+id;
-        $("#btnshare").html('<a href="whatsapp://send?text=How well do you know '+nam+'   Click here to know'+url+' " data-action="share/whatsapp/share">Share On Whatsapp</a>');
+        $("#btnshare").html('<a href="whatsapp://send?text=How well do you know '+nam+'   Click here to know     '+url+' " data-action="share/whatsapp/share">Share On Whatsapp</a>');
 
         $("#txtsharelink").html("  "+url+  "");
         //$("#txtsharelink").append(' '+url+'')
