@@ -89,7 +89,7 @@ def getUserQuestions(request):
         #countryList=Country.objects.all().objects.values_list('id', 'headline')
         id=request.GET["id"]
         #print("id is ",id)
-        newData=serializers.serialize("json",UserAnswer.objects.filter(Register__pk__contains=id))
+        newData=serializers.serialize("json",UserAnswer.objects.filter(Register__pk__exact=id))
         #print(newData) 
         if newData!="":            
             data = {
@@ -145,7 +145,8 @@ def getFriendsAnswerbyId(request):
         id=request.GET["id"] 
         name=Register.objects.get(pk=id)
         #print("name is ",name.name)
-        dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__contains=id))
+        #dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__contains=id))
+        dd=serializers.serialize("json",FriendsAnswer.objects.filter(Register__pk__exact=id))
         #print(dd)
         if dd!="":            
             data = {

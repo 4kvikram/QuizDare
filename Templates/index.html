@@ -107,9 +107,9 @@
                 success: function (data) {
                     if (data.success) {
                         //console.log("success get user answer")
-                        //console.log(data);
+                        console.log(data);
                         dd = JSON.parse(data.data)
-
+                        console.log(dd);
                         //console.log("friends answer adafadsfadsf   :",dd);
                         $("#txtnameHeading").html("How Well You Know "+data.name);
                         $("#tblresult").empty();
@@ -124,6 +124,11 @@
                     }
                 },
                 error: function (data) {
+                    
+                    $("#divname").remove();
+                    $("#divAnsweredUser").remove();
+                    $("#divquestion").remove();
+
                     console.log("error function");
                 }
             });
@@ -248,7 +253,7 @@
                     // console.log(data);
                     company = JSON.parse(data.data)
                     answerData = company;
-                    // console.log(company);
+                    console.log(company);
                 }
                 else {
                     console.log(data);
